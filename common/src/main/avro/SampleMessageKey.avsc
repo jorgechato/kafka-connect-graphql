@@ -1,0 +1,9 @@
+{
+    "type": "record",
+    "name": "SampleMessageKey",
+    "namespace": "com.adidas.graphql.kafka.connector.source.sample.records",
+    "fields": [{
+        "name" : "id",
+        "type" : "long"
+    }]
+}

@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+description 'streaming applications for Leanix data'
+
+repositories {
+    maven {
+        url 'https://packages.confluent.io/maven'
+    }
+}
+
+dependencies {
+    compile project(':common')
+
+//    compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+//    compile("org.springframework.kafka:spring-kafka:${springKafkaVersion}")
+//    compile("org.apache.kafka:kafka-streams:${kafkaStreamsVersion}")
+//    compile("org.apache.avro:avro:${avroVersion}")
+//    compile("io.confluent:kafka-streams-avro-serde:${confluentVersion}")
+//    compile("io.confluent:kafka-connect-avro-converter:${confluentVersion}")
+//
+//    compileOnly("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+//
+//    testCompile("org.apache.kafka:kafka-streams-test-utils:${kafkaStreamsTestUtilsVersion}")
+}
+
+//allOpen {
+//    annotation("org.springframework.context.annotation.Configuration")
+//}

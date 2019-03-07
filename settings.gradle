@@ -1,0 +1,6 @@
+rootProject.name = 'kafka-connect-graphql'
+
+include 'common'
+include 'source'
+include 'sink'
+
