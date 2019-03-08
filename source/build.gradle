@@ -5,7 +5,7 @@ plugins {
 description = "Kafka Connect Source that reads from a Graphql service"
 
 dependencies {
-    compile project(':common')
+    compile project(':leanix')
     compile "org.apache.kafka:connect-api:$kafka_version"
     implementation "org.apache.avro:avro:$avro_version"
     compile "io.confluent:kafka-connect-avro-converter:$avro_converter_version"

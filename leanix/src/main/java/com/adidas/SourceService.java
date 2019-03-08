@@ -6,7 +6,7 @@ import org.apache.avro.specific.SpecificRecord;
 
 import java.util.Random;
 
-public class GraphqlService {
+public class SourceService {
 //    TODO: change random number to actual values
 
     public SpecificRecord getKey(long id) {

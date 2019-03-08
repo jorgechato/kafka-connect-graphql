@@ -8,6 +8,7 @@ description 'Common code for a Graphql kafka connector'
 
 dependencies {
     implementation "org.apache.avro:avro:$avro_version"
+    implementation "net.leanix:leanix-sdk-java:$leanix_version"
 }
 
 avro {

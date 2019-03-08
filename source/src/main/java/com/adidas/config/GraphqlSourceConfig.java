@@ -19,6 +19,18 @@ public class GraphqlSourceConfig extends AbstractConfig {
         return this.getString(Config.KAFKA_TOPIC);
     }
 
+    public String getToken() {
+        return this.getString(Config.PROVIDER_TOKEN);
+    }
+
+    public String getBasePath() {
+        return this.getString(Config.PROVIDER_BASE_PATH);
+    }
+
+    public String getUrl() {
+        return this.getString(Config.PROVIDER_URL);
+    }
+
 
     public static final class Config {
         public static final String VERSION = "0.0.1";
@@ -29,8 +41,35 @@ public class GraphqlSourceConfig extends AbstractConfig {
         private static final String SLEEP_TIME = "connector.sleep.time";
         private static final String SLEEP_TIME_DOC = "how much time the connector should wait between messages";
 
+        private static final String PROVIDER_TOKEN = "provider.token";
+        private static final String PROVIDER_TOKEN_DOC = "";
+        private static final String PROVIDER_URL = "provider.host";
+        private static final String PROVIDER_URL_DOC = "";
+        private static final String PROVIDER_BASE_PATH = "provider.base.path";
+        private static final String PROVIDER_BASE_PATH_DOC = "";
+
         public static ConfigDef conf() {
             return new ConfigDef()
+                    .define(
+                            PROVIDER_URL,
+                            ConfigDef.Type.STRING,
+                            ConfigDef.Importance.HIGH,
+                            PROVIDER_URL_DOC
+                    )
+                    .define(
+                            PROVIDER_TOKEN,
+                            ConfigDef.Type.STRING,
+                            "",
+                            ConfigDef.Importance.MEDIUM,
+                            PROVIDER_TOKEN_DOC
+                    )
+                    .define(
+                            PROVIDER_BASE_PATH,
+                            ConfigDef.Type.STRING,
+                            "",
+                            ConfigDef.Importance.MEDIUM,
+                            PROVIDER_BASE_PATH_DOC
+                    )
                     .define(
                             KAFKA_TOPIC,
                             ConfigDef.Type.STRING,
