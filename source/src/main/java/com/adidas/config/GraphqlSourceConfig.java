@@ -42,11 +42,11 @@ public class GraphqlSourceConfig extends AbstractConfig {
         private static final String SLEEP_TIME_DOC = "how much time the connector should wait between messages";
 
         private static final String PROVIDER_TOKEN = "provider.token";
-        private static final String PROVIDER_TOKEN_DOC = "";
+        private static final String PROVIDER_TOKEN_DOC = "provider token if needed";
         private static final String PROVIDER_URL = "provider.host";
-        private static final String PROVIDER_URL_DOC = "";
+        private static final String PROVIDER_URL_DOC = "provider host to get messages from";
         private static final String PROVIDER_BASE_PATH = "provider.base.path";
-        private static final String PROVIDER_BASE_PATH_DOC = "";
+        private static final String PROVIDER_BASE_PATH_DOC = "provider base path if needed";
 
         public static ConfigDef conf() {
             return new ConfigDef()
@@ -60,14 +60,14 @@ public class GraphqlSourceConfig extends AbstractConfig {
                             PROVIDER_TOKEN,
                             ConfigDef.Type.STRING,
                             "",
-                            ConfigDef.Importance.MEDIUM,
+                            ConfigDef.Importance.LOW,
                             PROVIDER_TOKEN_DOC
                     )
                     .define(
                             PROVIDER_BASE_PATH,
                             ConfigDef.Type.STRING,
                             "",
-                            ConfigDef.Importance.MEDIUM,
+                            ConfigDef.Importance.LOW,
                             PROVIDER_BASE_PATH_DOC
                     )
                     .define(

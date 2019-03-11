@@ -49,7 +49,11 @@ public class GraphqlSourceTask extends SourceTask {
         this.id++;
 
         List<SourceRecord> records = new ArrayList<>();
-        SourceService service = new SourceService();
+        SourceService service = new SourceService(
+                this.sourceConfig.getUrl(),
+                this.sourceConfig.getBasePath(),
+                this.sourceConfig.getToken()
+        );
 
         records.add(
                 GraphqlAvroBuilder.build(

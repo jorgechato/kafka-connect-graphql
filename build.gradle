@@ -17,15 +17,35 @@ allprojects {
             url "https://packages.confluent.io/maven"
         }
     }
+}
 
+shadowJar {
+    from('assets') {
+        include '**/*_logo.*'
+    }
+
+    manifest {
+        attributes (
+                "component_types": [
+                        "source"
+                ],
+
+                "description": "This is a connector for getting data out of Leanix into apache Kafka.",
+                "logo": "assets/leanix_logo.png",
+                "name": "kafka-connect-leanix",
+                "title": "Kafka Connect Leanix",
+
+                "version": version
+        )
+    }
+    
     dependencies {
-//        testCompile group: 'junit', name: 'junit', version: '4.12'
+        exclude dependency('junit:junit:$junit_version')
     }
 }
 
 dependencies {
-    testCompile "junit:junit:4.12"
+    testCompile 'junit:junit:$junit_version'
 
-    compile project(':leanix')
     compile project(':source')
 }

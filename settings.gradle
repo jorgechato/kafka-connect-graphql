@@ -1,4 +1,4 @@
-rootProject.name = 'kafka-connect-graphql'
+rootProject.name = 'kafka-connect-leanix'
 
 include 'leanix'
 include 'source'
