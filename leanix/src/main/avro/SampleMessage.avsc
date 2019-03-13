@@ -1,9 +1,23 @@
 {
     "type": "record",
     "name": "SampleMessage",
-    "namespace": "com.adidas.graphql.kafka.connector.source.sample.records",
-    "fields": [{
-        "name" : "someIntField",
-        "type" : "int"
-    }]
+    "namespace": "com.adidas.leanix.kafka.connector.source.sample.records",
+    "fields": [
+    {
+        "name" : "oldValue",
+        "type" : "string"
+    },
+    {
+        "name" : "newValue",
+        "type" : "string"
+    },
+    {
+        "name" : "message",
+        "type" : "string"
+    },
+    {
+        "name" : "secondsPast",
+        "type" : "long"
+    }
+    ]
 }

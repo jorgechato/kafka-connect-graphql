@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GraphqlSourceTask extends SourceTask {
     private Logger log = LoggerFactory.getLogger(GraphqlSourceConnector.class);
@@ -21,7 +22,8 @@ public class GraphqlSourceTask extends SourceTask {
     private AvroData avroData;
 
     private boolean stop = true;
-    private long id = 0L;
+    private String cursor = "";
+    private SourceService service;
 
     @Override
     public String version() {
@@ -38,6 +40,12 @@ public class GraphqlSourceTask extends SourceTask {
         this.avroData = new AvroData(
                 new AvroDataConfig(this.props)
         );
+
+        this.service = new SourceService(
+                this.sourceConfig.getHost(),
+                this.sourceConfig.getBasePath(),
+                this.sourceConfig.getToken()
+        );
     }
 
     @Override
@@ -46,30 +54,24 @@ public class GraphqlSourceTask extends SourceTask {
             return new ArrayList<SourceRecord>();
         }
 
-        this.id++;
+        List<LogEventsRecord> records = this.service.getRecords(this.cursor);
 
-        List<SourceRecord> records = new ArrayList<>();
-        SourceService service = new SourceService(
-                this.sourceConfig.getUrl(),
-                this.sourceConfig.getBasePath(),
-                this.sourceConfig.getToken()
-        );
+        while (records.isEmpty()){
+            Thread.sleep(this.sourceConfig.getSleepTime());
+        }
 
-        records.add(
-                GraphqlAvroBuilder.build(
-                        this.sourceConfig,
-                        this.avroData,
-                        service.getKey(this.id),
-                        service.getValue(),
-                        this.id
+        return records
+                .stream()
+                .map(msg ->
+                        GraphqlAvroBuilder.build(
+                                this.sourceConfig,
+                                this.avroData,
+                                msg.getKey(),
+                                msg.getValue(),
+                                msg.getCursor()
+                        )
                 )
-        );
-
-        Thread.sleep(
-                this.sourceConfig.getSleepTime()
-        );
-
-        return records;
+                .collect(Collectors.toList());
     }
 
     @Override

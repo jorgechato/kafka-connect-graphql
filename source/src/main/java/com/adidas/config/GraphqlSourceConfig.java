@@ -27,7 +27,7 @@ public class GraphqlSourceConfig extends AbstractConfig {
         return this.getString(Config.PROVIDER_BASE_PATH);
     }
 
-    public String getUrl() {
+    public String getHost() {
         return this.getString(Config.PROVIDER_URL);
     }
 

@@ -68,3 +68,5 @@ crashlytics-build.properties
 fabric.properties
 
 .idea/
+
+*.render.json

@@ -16,11 +16,11 @@ public final class GraphqlAvroBuilder {
             AvroData avroData,
             SpecificRecord key,
             SpecificRecord value,
-            long id){
+            String cursor){
         Map partition = new HashMap<String, String>();
         partition.put("source", GraphqlSourceConfig.Config.PARTITION);
         Map offset = new HashMap<String, String>();
-        offset.put("id", id);
+        offset.put("cursor", cursor);
 
         SchemaAndValue keySchemaAndValue = avroData.toConnectData(key.getSchema(), key);
         SchemaAndValue valueSchemaAndValue = avroData.toConnectData(value.getSchema(), value);
