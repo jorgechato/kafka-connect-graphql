@@ -31,7 +31,6 @@ public class GraphqlSourceConfig extends AbstractConfig {
         return this.getString(Config.PROVIDER_URL);
     }
 
-
     public static final class Config {
         public static final String VERSION = "0.0.1";
         public static final String PARTITION = "sample";
@@ -80,7 +79,7 @@ public class GraphqlSourceConfig extends AbstractConfig {
                     .define(
                             SLEEP_TIME,
                             ConfigDef.Type.LONG,
-                            2000,
+                            1000,
                             ConfigDef.Importance.LOW,
                             SLEEP_TIME_DOC
                     );

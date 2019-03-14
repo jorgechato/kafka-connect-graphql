@@ -10,6 +10,7 @@ import net.leanix.api.models.GraphQLRequest;
 import net.leanix.api.models.GraphQLResult;
 
 public abstract class GraphQLQuery {
+//    private final
     private static final ObjectMapper mapper;
     static {
         mapper = new ObjectMapper();

@@ -1,6 +1,5 @@
 package com.adidas.config;
 
-import net.leanix.api.GraphqlApi;
 import net.leanix.api.common.ApiClient;
 import net.leanix.api.common.ApiClientBuilder;
 

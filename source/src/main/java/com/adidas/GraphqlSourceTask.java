@@ -15,15 +15,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GraphqlSourceTask extends SourceTask {
-    private Logger log = LoggerFactory.getLogger(GraphqlSourceConnector.class);
+    private Logger log = LoggerFactory.getLogger(GraphqlSourceTask.class);
 
     private GraphqlSourceConfig sourceConfig;
     private Map props = new HashMap<String, String>();
     private AvroData avroData;
+    private SourceService service;
 
+    private int sleepTimes;
     private boolean stop = true;
     private String cursor = "";
-    private SourceService service;
 
     @Override
     public String version() {
@@ -41,24 +42,37 @@ public class GraphqlSourceTask extends SourceTask {
                 new AvroDataConfig(this.props)
         );
 
+//        this.service = new SourceService(
+//                this.sourceConfig.getHost(),
+//                this.sourceConfig.getBasePath(),
+//                this.sourceConfig.getToken()
+//        );
         this.service = new SourceService(
-                this.sourceConfig.getHost(),
-                this.sourceConfig.getBasePath(),
-                this.sourceConfig.getToken()
+                "adidas.leanix.net",
+                "https://adidas.leanix.net/services/pathfinder/v1",
+                "VJx3bAwpemHKYNTGZkyMhjO4HNOF6sK9GyAaqzZz"
         );
     }
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
+        log.trace("Polling GraphqlSourceTask");
+
         if (this.stop){
-            return new ArrayList<SourceRecord>();
+            return new ArrayList<>();
         }
 
-        List<LogEventsRecord> records = this.service.getRecords(this.cursor);
+        this.sleepTimes = 0;
+
+        List<LogEventsRecord> records = new ArrayList<>();
 
         while (records.isEmpty()){
-            Thread.sleep(this.sourceConfig.getSleepTime());
+            Thread.sleep(this.sourceConfig.getSleepTime() + this.sleepTimes);
+            this.sleepTimes += 500;
+            records = this.service.getRecords(this.cursor);
         }
+
+        this.cursor = records.get(0).getCursor();
 
         return records
                 .stream()

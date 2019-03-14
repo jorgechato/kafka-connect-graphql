@@ -8,47 +8,63 @@ import net.leanix.api.common.ApiException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SourceService {
-    private ApiClient client;
+    private final ApiClient client;
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public SourceService(ApiClient client) {
+        this.client = client;
+    }
 
     public SourceService(String host, String basePath, String token) {
-        this.client = LeanixConfig.client(
+        this(LeanixConfig.client(
                 host,
                 basePath,
                 token
-        );
+        ));
     }
 
     public List<LogEventsRecord> getRecords (String cursor) {
         return getEdges(cursor)
                 .stream()
-                .map(edge ->
-                        new LogEventsRecord(
-                                edge.get("cursor").toString(),
-                                edge.get("node").get("id").toString(),
-                                edge.get("node").get("message").toString(),
-                                edge.get("node").get("newValue").toString(),
-                                edge.get("node").get("oldValue").toString(),
+                .map(edge -> {
+                    String newValue = edge.get("node")
+                            .has("newValue") ?
+                            edge.get("node")
+                                    .get("newValue")
+                                    .asText() :
+                            "null";
+
+                    String oldValue = edge.get("node")
+                            .has("oldValue") ?
+                            edge.get("node")
+                                    .get("oldValue")
+                                    .asText() :
+                            "null";
+
+                    return new LogEventsRecord(
+                            edge.get("cursor").asText(),
+                                edge.get("node").get("id").asText(),
+                                edge.get("node").get("message").asText(),
+                                newValue,
+                                oldValue,
                                 edge.get("node").get("secondsPast").asLong()
-                        )
-                )
+                        );
+                })
                 .collect(Collectors.toList());
     }
 
     private List<JsonNode> getEdges(String cursor) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-
             return mapper.readValue(
                     new GetLogEventsByCursor(cursor)
                             .execute(client)
                             .get("allLogEvents")
                             .get("edges")
-                            .toString(),
+                            .traverse(),
                     mapper
                             .getTypeFactory()
                             .constructCollectionType(
