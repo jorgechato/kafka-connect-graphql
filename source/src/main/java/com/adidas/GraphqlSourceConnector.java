@@ -13,7 +13,7 @@ import java.util.*;
 
 
 public class GraphqlSourceConnector extends SourceConnector {
-    private Logger log = LoggerFactory.getLogger(GraphqlSourceConnector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GraphqlSourceConnector.class);
 
     private GraphqlSourceConfig sourceConfig;
     private final Map configParams = new HashMap<String, String>();
@@ -25,7 +25,7 @@ public class GraphqlSourceConnector extends SourceConnector {
 
     @Override
     public void start(Map<String, String> props) {
-        log.info("Starting GraphqlSourceConnector");
+        LOG.info("Starting GraphqlSourceConnector");
 
         this.configParams.putAll(props);
         try {
@@ -54,7 +54,7 @@ public class GraphqlSourceConnector extends SourceConnector {
 
     @Override
     public void stop() {
-        log.info("Stopping GraphqlSourceConnector");
+        LOG.info("Stopping GraphqlSourceConnector");
     }
 
     @Override

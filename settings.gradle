@@ -1,4 +1,4 @@
-rootProject.name = 'kafka-connect-leanix'
+rootProject.name = "kafka-connect-leanix"
 
-include 'leanix'
-include 'source'
+include "leanix"
+include "source"

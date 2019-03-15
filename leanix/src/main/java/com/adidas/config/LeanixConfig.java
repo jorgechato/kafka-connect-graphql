@@ -6,8 +6,8 @@ import net.leanix.api.common.ApiClientBuilder;
 public class LeanixConfig {
     public static ApiClient client(String host, String basePath, String token) {
         return new ApiClientBuilder()
-                .withApiToken(token)
                 .withTokenProviderHost(host)
+                .withApiToken(token)
                 .withBasePath(basePath)
                 .withDebugging(true)
                 .build();

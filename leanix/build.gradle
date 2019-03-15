@@ -1,10 +1,10 @@
 plugins {
-    id 'java'
+    id "java"
     id "com.commercehub.gradle.plugin.avro" version "0.9.1"
 
 }
 
-description 'Common code for a Graphql kafka connector'
+description "Common code for a Graphql kafka connector"
 
 dependencies {
     implementation "org.apache.avro:avro:$avro_version"

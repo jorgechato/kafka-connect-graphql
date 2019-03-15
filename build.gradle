@@ -1,13 +1,13 @@
 plugins {
-    id 'java'
-    id 'com.github.johnrengelman.shadow' version "4.0.3"
+    id "java"
+    id "com.github.johnrengelman.shadow" version "4.0.3"
 
-    id 'idea'
+    id "idea"
 }
 
 allprojects {
-    group 'com.adidas'
-    version '1.0-SNAPSHOT'
+    group "com.adidas"
+    version "1.0-SNAPSHOT"
 
     sourceCompatibility = 1.8
 
@@ -19,33 +19,28 @@ allprojects {
     }
 }
 
-shadowJar {
-    from('assets') {
-        include '**/*_logo.*'
-    }
+//shadowJar {
+//    from("assets") {
+//        include "**/*_logo.*"
+//    }
 
-    manifest {
-        attributes (
-                "component_types": [
-                        "source"
-                ],
-
-                "description": "This is a connector for getting data out of Leanix into apache Kafka.",
-                "logo": "assets/leanix_logo.png",
-                "name": "kafka-connect-leanix",
-                "title": "Kafka Connect Leanix",
-
-                "version": version
-        )
-    }
-    
-    dependencies {
-        exclude dependency('junit:junit:$junit_version')
-    }
-}
+//    manifest {
+//        attributes (
+////                'Main-Class': "com.adidas.config.Main",
+//                "component_types": [
+//                        "source"
+//                ],
+//
+//                "description": "This is a connector for getting data out of Leanix into apache Kafka.",
+//                "logo": "assets/leanix_logo.png",
+//                "name": "kafka-connect-leanix",
+//                "title": "Kafka Connect Leanix",
+//
+//                "version": version
+//        )
+//    }
+//}
 
 dependencies {
-    testCompile 'junit:junit:$junit_version'
-
-    compile project(':source')
+    compile project(":source")
 }

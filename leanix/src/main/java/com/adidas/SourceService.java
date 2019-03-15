@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.leanix.api.common.ApiClient;
 import net.leanix.api.common.ApiException;
+import net.leanix.api.common.auth.ClientCredentialRefreshingOAuth;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import java.util.stream.Collectors;
 public class SourceService {
     private final ApiClient client;
     private final ObjectMapper mapper = new ObjectMapper();
+    private static final Logger LOG = LoggerFactory.getLogger(SourceService.class);
 
     public SourceService(ApiClient client) {
         this.client = client;
@@ -25,6 +29,9 @@ public class SourceService {
                 basePath,
                 token
         ));
+
+        ClientCredentialRefreshingOAuth tk = (ClientCredentialRefreshingOAuth) this.client.getAuthentication("token");
+        LOG.info(String.format("CLIENT 2 JORGE\n%s\n", tk.getAccessToken()));
     }
 
     public List<LogEventsRecord> getRecords (String cursor) {
@@ -47,12 +54,12 @@ public class SourceService {
 
                     return new LogEventsRecord(
                             edge.get("cursor").asText(),
-                                edge.get("node").get("id").asText(),
-                                edge.get("node").get("message").asText(),
-                                newValue,
-                                oldValue,
-                                edge.get("node").get("secondsPast").asLong()
-                        );
+                            edge.get("node").get("id").asText(),
+                            edge.get("node").get("message").asText(),
+                            newValue,
+                            oldValue,
+                            edge.get("node").get("secondsPast").asLong()
+                    );
                 })
                 .collect(Collectors.toList());
     }
@@ -61,7 +68,7 @@ public class SourceService {
         try {
             return mapper.readValue(
                     new GetLogEventsByCursor(cursor)
-                            .execute(client)
+                            .execute(this.client)
                             .get("allLogEvents")
                             .get("edges")
                             .traverse(),

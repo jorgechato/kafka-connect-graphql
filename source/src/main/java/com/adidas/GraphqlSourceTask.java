@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GraphqlSourceTask extends SourceTask {
-    private Logger log = LoggerFactory.getLogger(GraphqlSourceTask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GraphqlSourceTask.class);
 
     private GraphqlSourceConfig sourceConfig;
     private Map props = new HashMap<String, String>();
@@ -33,7 +33,7 @@ public class GraphqlSourceTask extends SourceTask {
 
     @Override
     public void start(Map<String, String> props) {
-        log.info("Starting GraphqlSourceTask");
+        LOG.info("Starting GraphqlSourceTask");
 
         this.stop = false;
         this.props = props;
@@ -42,21 +42,16 @@ public class GraphqlSourceTask extends SourceTask {
                 new AvroDataConfig(this.props)
         );
 
-//        this.service = new SourceService(
-//                this.sourceConfig.getHost(),
-//                this.sourceConfig.getBasePath(),
-//                this.sourceConfig.getToken()
-//        );
         this.service = new SourceService(
-                "adidas.leanix.net",
-                "https://adidas.leanix.net/services/pathfinder/v1",
-                "VJx3bAwpemHKYNTGZkyMhjO4HNOF6sK9GyAaqzZz"
+                this.sourceConfig.getHost(),
+                this.sourceConfig.getBasePath(),
+                this.sourceConfig.getToken()
         );
     }
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
-        log.trace("Polling GraphqlSourceTask");
+        LOG.trace("Polling GraphqlSourceTask");
 
         if (this.stop){
             return new ArrayList<>();
@@ -91,6 +86,6 @@ public class GraphqlSourceTask extends SourceTask {
     @Override
     public void stop() {
         this.stop = true;
-        log.info("Stopping GraphqlSourceTask");
+        LOG.info("Stopping GraphqlSourceTask");
     }
 }
