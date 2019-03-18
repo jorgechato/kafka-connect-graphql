@@ -23,7 +23,7 @@ public class GraphqlSourceTask extends SourceTask {
     private SourceService service;
 
     private int sleepTimes;
-    private boolean stop = true;
+    private volatile boolean stop = true;
     private String cursor = "";
 
     @Override

@@ -37,7 +37,7 @@ public class LogEventsRecord {
     private SpecificRecord buildValue(String message, String newValue, String oldValue, long sec) {
         SampleMessage record = new SampleMessage();
 
-        return record.newBuilder()
+        return SampleMessage.newBuilder()
                 .setMessage(message)
                 .setNewValue(newValue)
                 .setOldValue(oldValue)
