@@ -23,11 +23,11 @@ public class GraphqlSourceConfig extends AbstractConfig {
         return this.getString(Config.PROVIDER_TOKEN);
     }
 
-    public String getBasePath() {
-        return this.getString(Config.PROVIDER_BASE_PATH);
+    public String getTokenURL() {
+        return this.getString(Config.PROVIDER_TOKEN_URL);
     }
 
-    public String getHost() {
+    public String getURL() {
         return this.getString(Config.PROVIDER_URL);
     }
 
@@ -42,10 +42,10 @@ public class GraphqlSourceConfig extends AbstractConfig {
 
         private static final String PROVIDER_TOKEN = "provider.token";
         private static final String PROVIDER_TOKEN_DOC = "provider token if needed";
-        private static final String PROVIDER_URL = "provider.host";
-        private static final String PROVIDER_URL_DOC = "provider host to get messages from";
-        private static final String PROVIDER_BASE_PATH = "provider.base.path";
-        private static final String PROVIDER_BASE_PATH_DOC = "provider base path if needed";
+        private static final String PROVIDER_URL = "provider.url";
+        private static final String PROVIDER_URL_DOC = "provider graphql url to get messages from";
+        private static final String PROVIDER_TOKEN_URL = "provider.token.url";
+        private static final String PROVIDER_TOKEN_URL_DOC = "provider token url if needed";
 
         public static ConfigDef conf() {
             return new ConfigDef()
@@ -63,11 +63,11 @@ public class GraphqlSourceConfig extends AbstractConfig {
                             PROVIDER_TOKEN_DOC
                     )
                     .define(
-                            PROVIDER_BASE_PATH,
+                            PROVIDER_TOKEN_URL,
                             ConfigDef.Type.STRING,
                             "",
                             ConfigDef.Importance.LOW,
-                            PROVIDER_BASE_PATH_DOC
+                            PROVIDER_TOKEN_URL_DOC
                     )
                     .define(
                             KAFKA_TOPIC,

@@ -35,8 +35,6 @@ public class LogEventsRecord {
     }
 
     private SpecificRecord buildValue(String message, String newValue, String oldValue, long sec) {
-        SampleMessage record = new SampleMessage();
-
         return SampleMessage.newBuilder()
                 .setMessage(message)
                 .setNewValue(newValue)
@@ -46,9 +44,7 @@ public class LogEventsRecord {
     }
 
     private SpecificRecord buildKey(String id, String model) {
-        SampleMessageKey record = new SampleMessageKey();
-
-        return record.newBuilder()
+        return SampleMessageKey.newBuilder()
                 .setId(id)
                 .setModel(model)
                 .build();

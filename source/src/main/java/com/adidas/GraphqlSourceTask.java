@@ -43,8 +43,8 @@ public class GraphqlSourceTask extends SourceTask {
         );
 
         this.service = new SourceService(
-                this.sourceConfig.getHost(),
-                this.sourceConfig.getBasePath(),
+                this.sourceConfig.getURL(),
+                this.sourceConfig.getTokenURL(),
                 this.sourceConfig.getToken()
         );
     }
@@ -59,13 +59,14 @@ public class GraphqlSourceTask extends SourceTask {
 
         this.sleepTimes = 0;
 
-        List<LogEventsRecord> records = new ArrayList<>();
-
-        while (records.isEmpty()){
-            Thread.sleep(this.sourceConfig.getSleepTime() + this.sleepTimes);
-            this.sleepTimes += 500;
-            records = this.service.getRecords(this.cursor);
-        }
+//        List<LogEventsRecord> records = new ArrayList<>();
+//
+//        while (records.isEmpty()){
+//            Thread.sleep(this.sourceConfig.getSleepTime() + this.sleepTimes);
+//            this.sleepTimes += 500;
+//            records = this.service.getRecords(this.cursor);
+//        }
+        List<LogEventsRecord> records = this.service.getRecords(this.cursor);
 
         this.cursor = records.get(0).getCursor();
 

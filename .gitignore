@@ -70,3 +70,5 @@ fabric.properties
 .idea/
 
 *.render.json
+
+**/Main.java

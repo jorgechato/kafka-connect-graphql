@@ -1,14 +1,25 @@
 plugins {
     id "java"
     id "com.commercehub.gradle.plugin.avro" version "0.9.1"
-
 }
 
 description "Common code for a Graphql kafka connector"
 
+repositories {
+    mavenCentral()
+    maven {
+        url "https://packages.confluent.io/maven"
+    }
+    maven {
+        url 'https://dl.bintray.com/americanexpress/maven/'
+    }
+}
+
 dependencies {
     implementation "org.apache.avro:avro:$avro_version"
-    compile "net.leanix:leanix-sdk-java:$leanix_version"
+    implementation "io.aexp.nodes.graphql:nodes:$graphql_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "org.json:json:$json_version"
 }
 
 avro {

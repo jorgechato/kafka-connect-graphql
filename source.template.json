@@ -11,8 +11,8 @@
     "value.converter.value.subject.name.strategy": "io.confluent.kafka.serializers.subject.TopicRecordNameStrategy",
     "tasks.max": 1,
 
-    "provider.token": "",
-    "provider.host": "",
-    "provider.base.path": ""
+    "provider.url": "",
+    "provider.token.url": "",
+    "provider.token": ""
   }
 }
