@@ -11,39 +11,19 @@ public class LogEvents {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getOldValue() {
-        return oldValue == null ? "" : oldValue;
-    }
-
-    public void setOldValue(String oldValue) {
-        this.oldValue = oldValue;
+        return oldValue;
     }
 
     public String getNewValue() {
-        return newValue == null ? "" : newValue;
-    }
-
-    public void setNewValue(String newValue) {
-        this.newValue = newValue;
+        return newValue;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public long getSecondsPast() {
         return secondsPast;
-    }
-
-    public void setSecondsPast(long secondsPast) {
-        this.secondsPast = secondsPast;
     }
 }

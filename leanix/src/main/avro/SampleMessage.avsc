@@ -5,11 +5,13 @@
     "fields": [
     {
         "name" : "oldValue",
-        "type" : "string"
+        "type" : ["null", "string"],
+        "default": null
     },
     {
         "name" : "newValue",
-        "type" : "string"
+        "type" : ["null", "string"],
+        "default": null
     },
     {
         "name" : "message",

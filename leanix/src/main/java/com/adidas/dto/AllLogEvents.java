@@ -6,8 +6,8 @@ import io.aexp.nodes.graphql.annotations.GraphQLProperty;
 import java.util.List;
 
 @GraphQLProperty(name="allLogEvents", arguments={
-        @GraphQLArgument(name="before", value=""),
-        @GraphQLArgument(name="factSheetId", value=""),
+        @GraphQLArgument(name="before"),
+        @GraphQLArgument(name="factSheetId"),
 })
 public class AllLogEvents {
     private List<Edges> edges;

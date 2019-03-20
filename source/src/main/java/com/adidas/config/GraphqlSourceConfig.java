@@ -33,7 +33,9 @@ public class GraphqlSourceConfig extends AbstractConfig {
 
     public static final class Config {
         public static final String VERSION = "0.0.1";
+        public static final String PARTITION_KEY = "source";
         public static final String PARTITION = "sample";
+        public static final String OFFSET_KEY = "graphql-cursor";
 
         private static final String KAFKA_TOPIC = "kafka.topic";
         private static final String KAFKA_TOPIC_DOC = "Kafka topic to send messages";
@@ -46,6 +48,8 @@ public class GraphqlSourceConfig extends AbstractConfig {
         private static final String PROVIDER_URL_DOC = "provider graphql url to get messages from";
         private static final String PROVIDER_TOKEN_URL = "provider.token.url";
         private static final String PROVIDER_TOKEN_URL_DOC = "provider token url if needed";
+
+        private Config() {}
 
         public static ConfigDef conf() {
             return new ConfigDef()

@@ -11,15 +11,7 @@ public class Edges {
         return node;
     }
 
-    public void setNode(LogEvents node) {
-        this.node = node;
-    }
-
     public String getCursor() {
         return cursor;
-    }
-
-    public void setCursor(String cursor) {
-        this.cursor = cursor;
     }
 }

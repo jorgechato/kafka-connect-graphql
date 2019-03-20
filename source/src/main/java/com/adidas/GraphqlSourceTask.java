@@ -5,13 +5,11 @@ import io.confluent.connect.avro.AvroData;
 import io.confluent.connect.avro.AvroDataConfig;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
+import org.apache.kafka.connect.source.SourceTaskContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GraphqlSourceTask extends SourceTask {
@@ -23,7 +21,29 @@ public class GraphqlSourceTask extends SourceTask {
     private SourceService service;
 
     private volatile boolean stop = true;
-    private String cursor = "";
+    private volatile String cursor = "";
+
+    @Override
+    public void initialize(SourceTaskContext context) {
+        Map<String, Object> offset = context
+                .offsetStorageReader()
+                .offset(
+                        Collections.singletonMap(
+                                GraphqlSourceConfig.Config.PARTITION_KEY,
+                                GraphqlSourceConfig.Config.PARTITION
+                        )
+                );
+
+        LOG.info(String.format("Is offset ready? %b", offset != null));
+
+        if (offset != null) {
+            String lastRecordedOffset = (String) offset.get(GraphqlSourceConfig.Config.OFFSET_KEY);
+            if (lastRecordedOffset != null) {
+                LOG.info(String.format("Offset value %s", lastRecordedOffset));
+                this.cursor = lastRecordedOffset;
+            }
+        }
+    }
 
     @Override
     public String version() {
@@ -50,20 +70,25 @@ public class GraphqlSourceTask extends SourceTask {
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
-        LOG.trace("Polling GraphqlSourceTask");
+        LOG.info(String.format("Polling GraphqlSourceTask with offset %s", this.cursor));
 
         if (this.stop){
             return new ArrayList<>();
         }
 
-        List<LogEventsRecord> records = this.service.getRecords(this.cursor);
+        List<LogEventsRecord> records = new ArrayList<>();
 
-        if (records.isEmpty()) {
-            Thread.sleep(this.sourceConfig.getSleepTime());
-            return new ArrayList<>();
+        while (records.isEmpty()) {
+            records = this.service.getRecords(this.cursor);
+
+            if (records.isEmpty()) {
+                Thread.sleep(this.sourceConfig.getSleepTime());
+            } else {
+                this.cursor = records.get(0).getCursor();
+            }
         }
 
-        this.cursor = records.get(0).getCursor();
+        Collections.reverse(records);
 
         return records
                 .stream()
@@ -71,9 +96,8 @@ public class GraphqlSourceTask extends SourceTask {
                         GraphqlAvroBuilder.build(
                                 this.sourceConfig,
                                 this.avroData,
-                                msg.getKey(),
-                                msg.getValue(),
-                                msg.getCursor()
+                                msg.getKey(), msg.getValue(),
+                                GraphqlSourceConfig.Config.OFFSET_KEY, msg.getCursor()
                         )
                 )
                 .collect(Collectors.toList());

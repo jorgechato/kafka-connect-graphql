@@ -10,25 +10,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GraphQLQuery {
-    private static final OkHttpClient CLIENT = new OkHttpClient();
+    private final OkHttpClient client;
 
     private static Map<String, String> props = new HashMap<>();
 
-    private final String GRAPHQL_URL;
-    private final String TOKEN_URL;
-    private final String ACCESS_TOKEN;
+    private final String graphqlUrl;
+    private final String tokenUrl;
+    private final String accessToken;
 
     private String token;
 
-    public GraphQLQuery(String GRAPHQL_URL, String TOKEN_URL, String ACCESS_TOKEN, String token) {
-        this.GRAPHQL_URL = GRAPHQL_URL;
-        this.TOKEN_URL = TOKEN_URL;
-        this.ACCESS_TOKEN = ACCESS_TOKEN;
+    public GraphQLQuery(OkHttpClient client, String graphqlUrl, String tokenUrl, String accessToken, String token) {
+        this.client = client;
+        this.graphqlUrl = graphqlUrl;
+        this.tokenUrl = tokenUrl;
+        this.accessToken = accessToken;
         this.token = token;
     }
 
-    public GraphQLQuery(String GRAPHQL_URL, String TOKEN_URL, String ACCESS_TOKEN) {
-        this(GRAPHQL_URL, TOKEN_URL, ACCESS_TOKEN, null);
+    public GraphQLQuery(String graphqlUrl, String tokenUrl, String accessToken, String token) {
+        this(new OkHttpClient(), graphqlUrl, tokenUrl, accessToken, token);
+    }
+
+    public GraphQLQuery(String graphqlUrl, String tokenUrl, String accessToken) {
+        this(graphqlUrl, tokenUrl, accessToken, null);
         this.token = getToken();
     }
 
@@ -40,7 +45,7 @@ public class GraphQLQuery {
 
         return GraphQLRequestEntity
                 .Builder()
-                .url(this.GRAPHQL_URL)
+                .url(this.graphqlUrl)
                 .headers(props);
     }
 
@@ -48,7 +53,7 @@ public class GraphQLQuery {
         try {
             Request request = new Request
                     .Builder()
-                    .url(this.TOKEN_URL)
+                    .url(this.tokenUrl)
                     .post(
                             RequestBody.create(
                                     MediaType.parse("application/x-www-form-urlencoded"),
@@ -59,14 +64,14 @@ public class GraphQLQuery {
                             "authorization",
                             Credentials.basic(
                                     "apitoken",
-                                    this.ACCESS_TOKEN
+                                    this.accessToken
                             )
                     )
                     .addHeader("content-type", "application/x-www-form-urlencoded")
                     .build();
 
             return new JSONObject(
-                    CLIENT
+                    client
                             .newCall(request)
                             .execute()
                             .body()
@@ -74,6 +79,7 @@ public class GraphQLQuery {
             )
                     .getString("access_token");
         } catch (IOException e) {
+//            TODO
             e.printStackTrace();
         }
 
