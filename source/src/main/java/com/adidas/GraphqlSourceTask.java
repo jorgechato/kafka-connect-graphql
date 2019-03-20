@@ -22,7 +22,6 @@ public class GraphqlSourceTask extends SourceTask {
     private AvroData avroData;
     private SourceService service;
 
-    private int sleepTimes;
     private volatile boolean stop = true;
     private String cursor = "";
 
@@ -57,16 +56,12 @@ public class GraphqlSourceTask extends SourceTask {
             return new ArrayList<>();
         }
 
-        this.sleepTimes = 0;
-
-//        List<LogEventsRecord> records = new ArrayList<>();
-//
-//        while (records.isEmpty()){
-//            Thread.sleep(this.sourceConfig.getSleepTime() + this.sleepTimes);
-//            this.sleepTimes += 500;
-//            records = this.service.getRecords(this.cursor);
-//        }
         List<LogEventsRecord> records = this.service.getRecords(this.cursor);
+
+        if (records.isEmpty()) {
+            Thread.sleep(this.sourceConfig.getSleepTime());
+            return new ArrayList<>();
+        }
 
         this.cursor = records.get(0).getCursor();
 

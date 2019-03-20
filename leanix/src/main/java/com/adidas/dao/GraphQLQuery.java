@@ -35,7 +35,7 @@ public class GraphQLQuery {
     public GraphQLRequestEntity.RequestBuilder build() throws MalformedURLException {
         props.put(
                 "Authorization",
-                String.format("Bearer %s", this.token)
+                String.format("Bearer %s", getToken())
         );
 
         return GraphQLRequestEntity
@@ -77,6 +77,6 @@ public class GraphQLQuery {
             e.printStackTrace();
         }
 
-        return token;
+        return this.token;
     }
 }

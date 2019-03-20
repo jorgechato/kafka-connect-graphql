@@ -7,7 +7,7 @@ import java.util.List;
 
 @GraphQLProperty(name="allLogEvents", arguments={
         @GraphQLArgument(name="before", value=""),
-        @GraphQLArgument(name="factSheetId", value="")
+        @GraphQLArgument(name="factSheetId", value=""),
 })
 public class AllLogEvents {
     private List<Edges> edges;

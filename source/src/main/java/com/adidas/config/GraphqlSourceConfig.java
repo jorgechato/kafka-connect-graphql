@@ -58,22 +58,20 @@ public class GraphqlSourceConfig extends AbstractConfig {
                     .define(
                             PROVIDER_TOKEN,
                             ConfigDef.Type.STRING,
-                            "",
-                            ConfigDef.Importance.LOW,
+                            ConfigDef.Importance.HIGH,
                             PROVIDER_TOKEN_DOC
                     )
                     .define(
                             PROVIDER_TOKEN_URL,
                             ConfigDef.Type.STRING,
-                            "",
-                            ConfigDef.Importance.LOW,
+                            ConfigDef.Importance.HIGH,
                             PROVIDER_TOKEN_URL_DOC
                     )
                     .define(
                             KAFKA_TOPIC,
                             ConfigDef.Type.STRING,
                             "default-sample-graphql-topic",
-                            ConfigDef.Importance.LOW,
+                            ConfigDef.Importance.MEDIUM,
                             KAFKA_TOPIC_DOC
                     )
                     .define(
