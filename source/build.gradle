@@ -1,8 +1,19 @@
 plugins {
     id "java"
+    id "maven"
 }
 
 description = "Kafka Connect Source that reads from a Graphql service"
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://packages.confluent.io/maven"
+    }
+    maven {
+        url 'https://dl.bintray.com/americanexpress/maven/'
+    }
+}
 
 dependencies {
     implementation project(":leanix")

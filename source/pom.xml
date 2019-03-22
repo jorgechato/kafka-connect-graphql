@@ -1,0 +1,297 @@
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.adidas</groupId>
+    <artifactId>source</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Archetype - kafka-connect-graphql</name>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.adidas</groupId>
+        <artifactId>kafka-connect-leanix</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <repositories>
+        <repository>
+            <id>amex</id>
+            <name>americanexpress</name>
+            <url>${amex.maven.repo}</url>
+        </repository>
+
+        <repository>
+            <id>confluent</id>
+            <name>confluent.io</name>
+            <url>${confluent.maven.repo}</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+
+        <kafka-connect-api.version>1.1.0</kafka-connect-api.version>
+        <kafka-connect-avro-converter.version>5.0.0</kafka-connect-avro-converter.version>
+
+        <kafka.connect.maven.plugin.version>0.11.1</kafka.connect.maven.plugin.version>
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+
+        <licenses.version>${project.version}</licenses.version>
+        <licenses.name>Confluent Community License</licenses.name>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>connect-api</artifactId>
+            <version>${kafka-connect-api.version}</version>
+            <scope>runtime</scope>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-connect-avro-converter</artifactId>
+            <version>${kafka-connect-avro-converter.version}</version>
+            <scope>runtime</scope>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-connect-maven-plugin</artifactId>
+                <version>${kafka.connect.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>kafka-connect</goal>
+                        </goals>
+
+                        <configuration>
+                            <title>Kafka Connect Leanix</title>
+                            <description>
+                                Kafka Connect Leanix connector.
+                            </description>
+                            <logo>assets/leanix_logo.png</logo>
+
+                            <ownerUsername>adidas</ownerUsername>
+                            <ownerType>organization</ownerType>
+                            <ownerName>Adidas, Inc.</ownerName>
+                            <ownerUrl>https://adidas.github.io/</ownerUrl>
+
+                            <componentTypes>
+                                <componentType>source</componentType>
+                            </componentTypes>
+
+                            <confluentControlCenterIntegration>false</confluentControlCenterIntegration>
+
+                            <requirements>
+                                <requirement>Leanix API Token</requirement>
+                            </requirements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <inherited>true</inherited>
+
+                <goals>
+                    <goal>testCompile</goal>
+                </goals>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <!--<descriptors>-->
+                        <!--<descriptor>src/assembly/development.xml</descriptor>-->
+                        <!--<descriptor>src/assembly/package.xml</descriptor>-->
+                    <!--</descriptors>-->
+                    <attach>false</attach>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>standalone</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/standalone.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>licenses-package</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+
+                        <executions>
+                            <execution>
+                                <id>create-licenses</id>
+                                <configuration>
+                                    <mainClass>io.confluent.licenses.LicenseFinder</mainClass>
+                                    <arguments>
+                                        <!-- Note use of development instead of package so we pick up all dependencies. -->
+                                        <argument>-i
+                                            ${project.build.directory}/${project.build.finalName}-package/share/java/${project.name}
+                                        </argument>
+                                        <argument>-o ${project.basedir}/licenses</argument>
+                                        <argument>-f</argument>
+                                        <argument>-h
+                                            ${project.build.directory}/${project.build.finalName}-package/share/doc/${project.name}/licenses.html
+                                        </argument>
+                                        <argument>-l
+                                            ${project.build.directory}/${project.build.finalName}-package/share/doc/${project.name}/licenses
+                                        </argument>
+                                        <argument>-n
+                                            ${project.build.directory}/${project.build.finalName}-package/share/doc/${project.name}/notices
+                                        </argument>
+                                        <argument>-t ${project.name}</argument>
+                                        <argument>-x licenses-${licenses.version}.jar</argument>
+                                    </arguments>
+                                </configuration>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <includeProjectDependencies>true</includeProjectDependencies>
+                            <includePluginDependencies>true</includePluginDependencies>
+                            <executableDependency>
+                                <groupId>io.confluent</groupId>
+                                <artifactId>licenses</artifactId>
+                            </executableDependency>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>licenses-source</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+
+                        <executions>
+                            <execution>
+                                <id>create-licenses</id>
+                                <configuration>
+                                    <mainClass>io.confluent.licenses.LicenseFinder</mainClass>
+                                    <arguments>
+                                        <!-- Note use of development instead of package so we pick up all dependencies. -->
+                                        <argument>-i
+                                            ${project.build.directory}/${project.build.finalName}-development/share/java/${project.name}
+                                        </argument>
+                                        <argument>-o ${project.basedir}/licenses</argument>
+                                        <argument>-f</argument>
+                                        <argument>-h ${project.basedir}/licenses.html</argument>
+                                        <argument>-l ${project.basedir}/licenses</argument>
+                                        <argument>-n ${project.basedir}/notices</argument>
+                                        <argument>-t ${project.name}</argument>
+                                        <argument>-x licenses-${licenses.version}.jar</argument>
+                                    </arguments>
+                                </configuration>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <includeProjectDependencies>true</includeProjectDependencies>
+                            <includePluginDependencies>true</includePluginDependencies>
+                            <executableDependency>
+                                <groupId>io.confluent</groupId>
+                                <artifactId>licenses</artifactId>
+                            </executableDependency>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven-clean-plugin.version}</version>
+
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>.</directory>
+                                    <includes>
+                                        <include>licenses.html</include>
+                                        <directory>licenses/*.*</directory>
+                                        <directory>notices/*.*</directory>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

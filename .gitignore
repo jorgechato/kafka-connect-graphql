@@ -72,3 +72,4 @@ fabric.properties
 *.render.json
 
 **/Main.java
+target

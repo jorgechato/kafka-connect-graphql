@@ -1,2 +1,4 @@
 rootProject.name = "source"
 
+include "leanix"
+project(':leanix').projectDir = new File('/Users/chatojor/Projects/github/kafka-connect-graphql/leanix')

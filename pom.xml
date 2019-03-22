@@ -1,0 +1,59 @@
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.adidas</groupId>
+    <artifactId>kafka-connect-leanix</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Archetype - kafka-connect-leanix</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <amex.maven.repo>https://dl.bintray.com/americanexpress/maven/</amex.maven.repo>
+        <confluent.maven.repo>https://packages.confluent.io/maven</confluent.maven.repo>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <modules>
+        <module>leanix</module>
+        <module>source</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>amex</id>
+            <name>americanexpress</name>
+            <url>${amex.maven.repo}</url>
+        </repository>
+
+        <repository>
+            <id>confluent</id>
+            <name>confluent.io</name>
+            <url>${confluent.maven.repo}</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <argLine>@{argLine} -Djava.awt.headless=true</argLine>
+                        <reuseForks>false</reuseForks>
+                        <forkCount>1</forkCount>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
